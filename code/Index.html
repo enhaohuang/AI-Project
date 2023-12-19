@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>宠物品种识别</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        #preview {
+            margin-top: 20px;
+            max-width: 500px;
+            max-height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>上传图片进行宠物品种识别</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput" required>
+        <input type="submit" value="识别">
+    </form>
+    <img id="preview" src="" alt="预览图像" hidden/>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+            formData.append('file', document.getElementById('fileInput').files[0]);
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  console.log('Prediction:', data.prediction);
+                  // 在这里处理预测结果，例如显示在页面上
+              }).catch(error => {
+                  console.error('Error:', error);
+              });
+        });
+    </script>
+    
+</body>
+</html>
